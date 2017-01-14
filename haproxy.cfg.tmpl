@@ -20,4 +20,5 @@ frontend http-in
   use_backend remote if is_websocket
 
 backend remote
+  reqadd X-Forwarded-Proto:\ https
   server remoteserv ${UPSTREAM}
