@@ -1,10 +1,12 @@
-FROM nginx:alpine
+FROM haproxy:alpine
 MAINTAINER Andrew Taranik <me@pureclouds.net>
 
-ADD default.conf.tmpl /etc/nginx/default.conf.tmpl
+ADD haproxy.cfg.tmpl /usr/local/etc/haproxy/haproxy.cfg.tmpl
 ADD init.sh /init.sh
 
 EXPOSE 80
 
-RUN chmod +x /init.sh
+RUN apk add --no-cache gettext \
+ && chmod +x /init.sh
+
 CMD ["/init.sh"]

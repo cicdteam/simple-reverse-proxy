@@ -1,0 +1,26 @@
+global
+  maxconn 4096
+  ssl-server-verify none
+
+defaults
+  mode http
+  balance roundrobin
+  option redispatch
+  option forwardfor
+
+  timeout connect 5s
+  timeout queue 5s
+  timeout client 36000s
+  timeout server 36000s
+
+frontend http-in
+  mode tcp
+  bind *:80
+  default_backend remote
+
+  acl is_websocket hdr(Upgrade) -i WebSocket
+  acl is_websocket hdr_beg(Host) -i ws
+  use_backend remote if is_websocket
+
+backend remote
+  server remoteserv ${UPSTREAM}
